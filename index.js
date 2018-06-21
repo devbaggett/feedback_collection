@@ -9,7 +9,7 @@ const app = express();
 
 // *** create route handler and associate it with given route ***
 app.get("/", (req, res) => {
-	res.send({ love you: "boo bear" });
+	res.send({ loveyou: "boo bear" });
 });
 
 // *** wait for Heroku to tell us what our app's port will be ***
