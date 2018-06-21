@@ -1,16 +1,27 @@
 // *** import express library (commonJS module syntax for node) ***
 const express = require("express");
 
-// *** use express library to create express application (single app) ***
-// used to set up configuration that will listen for incoming requests
-// that are being routed to the Express side of the app from the Node side
-// then route those requests on to different route handlers
-const app = express();
+// IMPORT PASSPORT AND PASSPORT STRATEGY
+const passport = require("passport");
+// IMPORTS 2 DIFF PROPERTIES, WE ONLY NEED STRATEGY
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+// IMPORT KEYS.JS INTO KEYS OBJECT
+// any file that ends in .js doesn't need the extension when importing
+const keys = require("./config/keys.js");
 
-// *** create route handler and associate it with given route ***
-app.get("/", (req, res) => {
-	res.send({ loveyou: "boo bear" });
-});
+// CREATES A NEW INSTANCE OF THE GOOGLE PASSPORT STRATEGY
+// inside the function constructor tells google how to authenticate users inside app
+// passport.use - be aware of new strategy available
+passport.use(
+	new GoogleStrategy({
+		clientID: keys.googleClientID,
+		clientSecret: keys.googleClientSecret,
+		callbackURL: "/auth/google/callback"
+	})
+);
+
+// *** use express library to create express application (single app) ***
+const app = express();
 
 // *** wait for Heroku to tell us what our app's port will be ***
 // if there is a Heroku port available, set it for production
