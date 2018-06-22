@@ -1,27 +1,45 @@
 // *** import express library (commonJS module syntax for node) ***
 const express = require("express");
-
-// IMPORT PASSPORT AND PASSPORT STRATEGY
+// IMPORT MONGOOSE
+const mongoose = require("mongoose");
+// IMPORT COOKIE-SESSION MODULE
+const cookieSession = require("cookie-session");
+// IMPORT PASSPORT HELPER
 const passport = require("passport");
-// IMPORTS 2 DIFF PROPERTIES, WE ONLY NEED STRATEGY
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-// IMPORT KEYS.JS INTO KEYS OBJECT
-// any file that ends in .js doesn't need the extension when importing
-const keys = require("./config/keys.js");
+// IMPORT KEYS.JS
+const keys = require("./config/keys");
 
-// CREATES A NEW INSTANCE OF THE GOOGLE PASSPORT STRATEGY
-// inside the function constructor tells google how to authenticate users inside app
-// passport.use - be aware of new strategy available
-passport.use(
-	new GoogleStrategy({
-		clientID: keys.googleClientID,
-		clientSecret: keys.googleClientSecret,
-		callbackURL: "/auth/google/callback"
-	})
-);
+// IMPORT USER.JS FILE WITHOUT ASSIGNMENT
+require("./models/User");
+// IMPORT PASSPORT FILE WITHOUT ASSIGNMENT
+require("./services/passport");
+
+// INSTRUCT MONGOOSE TO ATTEMPT TO CONNECT TO MONGODB
+mongoose.connect(keys.mongoURI);
 
 // *** use express library to create express application (single app) ***
 const app = express();
+
+// ENABLE COOKIES AND GET EXPRESS TO CARE ABOUT THEM
+app.use(
+	cookieSession({
+		// PROVIDE CONFIG OBJECT WITH 2 DIFFERENT PROPERTIES
+		// how long this cookie can exist in browser before it expires
+		// has to be passed in by milliseconds (we want 30 days)
+		// 30 days * 24 hr * 60 min % 60 sec * 1000 ms
+		maxAge: 30 * 24 * 60 * 60 * 1000,
+		// KEY TO ENCRYPT COOKIE
+		keys: [keys.cookieKey]
+	})
+);
+
+// TELL PASSPORT TO MAKE USE OF COOKIES TO HANDLE AUTHENTICATION
+// 2 additional calls:
+app.use(passport.initialize());
+app.use(passport.session());
+
+// CALL AUTHROUTES FUNCTION WITH APP OBJECT
+require("./routes/authRoutes")(app);
 
 // *** wait for Heroku to tell us what our app's port will be ***
 // if there is a Heroku port available, set it for production
