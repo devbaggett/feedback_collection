@@ -45,22 +45,17 @@ passport.use(
 			proxy: true
 		},
 		// SECOND ARGUMENT AS CALLBACK
-		(accessToken, refreshToken, profile, done) => {
+		async (accessToken, refreshToken, profile, done) => {
 			// QUERY DATABASE OVER ALL RECORDS
-			// attempt to find first record in User collection where googleId = profile.id
-			// this returns a promise
-			User.findOne({ googleID: profile.id }).then(existingUser => {
-				// to figure out if we have an existing user
-				if (existingUser) {
-					// we already have a record with given profile ID (null)
-					done(null, existingUser);
-				} else {
-					// we don't have user record with this ID, make a new record!
-					new User({ googleID: profile.id })
-						.save()
-						.then(user => done(null, user));
-				}
-			});
+			const existingUser = await User.findOne({ googleID: profile.id });
+			// figure out if we have an existing user
+			if (existingUser) {
+				// we already have a record with given profile ID (null)
+				return done(null, existingUser);
+			}
+			// we don't have user record with this ID, make a new record!
+			const user = await new User({ googleID: profile.id }).save();
+			done(null, user);
 		}
 	)
 );
