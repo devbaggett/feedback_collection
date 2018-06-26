@@ -4,13 +4,11 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 
 import App from "./components/App";
+// IMPORT STATEMENT FOR ALL THE DIFFERENT REDUCERS
+import reducers from "./reducers";
 
 // USE CREATESTORE HELPER TO CREATE NEW REDUX STORE INSTANCE
-// First argument to createStore is diff reducers we have in app
-// Below is a dummy reducer so we can get Redux started up
-// Second argument is initial state of app
-// Third arg is applyMiddleware
-const store = createStore(() => [], {}, applyMiddleware());
+const store = createStore(reducers, {}, applyMiddleware());
 
 // CREATE PROVIDOR TAG AND PLACE APP COMPONENT INSIDE IT
 ReactDOM.render(
