@@ -13,7 +13,15 @@ const Landing = () => <h2>Landing</h2>;
 // CREATE APP COMPONENT
 const App = () => {
 	// RETURN JSX
-	return <div>Hi there</div>;
+	return (
+		<div>
+			<BrowserRouter>
+				<div>
+					<Route path="/" component={Landing} />
+				</div>
+			</BrowserRouter>
+		</div>
+	);
 };
 
 // EXPORT COMPONENT
