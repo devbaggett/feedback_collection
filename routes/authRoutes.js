@@ -18,7 +18,13 @@ module.exports = app => {
 
 	// ROUTE HANDLER FOR CODE EXCHANGE (FOLLOWUP REQUEST) WITH GOOGLE AFTER USER GETS SENT BACK
 	// access token will be console logged from 'passport.use' callback
-	app.get("/auth/google/callback", passport.authenticate("google"));
+	app.get(
+		"/auth/google/callback",
+		passport.authenticate("google"),
+		(req, res) => {
+			res.redirect("/surveys");
+		}
+	);
 
 	// ROUTE HANDLER for logging out
 	app.get("/api/logout", (req, res) => {
