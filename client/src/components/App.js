@@ -4,8 +4,8 @@ import React from "react";
 // Route is react component sets rules and components that will be visible on screen
 import { BrowserRouter, Route } from "react-router-dom";
 
+import Header from "./Header";
 // dummy components
-const Header = () => <h2>Header</h2>;
 const Dashboard = () => <h2>Dashboard</h2>;
 const SurveyNew = () => <h2>SurveyNew</h2>;
 const Landing = () => <h2>Landing</h2>;
@@ -14,7 +14,7 @@ const Landing = () => <h2>Landing</h2>;
 const App = () => {
 	// RETURN JSX
 	return (
-		<div>
+		<div className="container">
 			<BrowserRouter>
 				<div>
 					<Header />
