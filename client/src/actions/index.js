@@ -5,7 +5,8 @@ import axios from "axios";
 import { FETCH_USER } from "./types";
 
 // DEFINE ACTION CREATOR
-const fetchUser = () => {
+export const fetchUser = () => async dispatch => {
 	// MAKE GET REQUEST TO BACKEND (found in authRoutes.js)
-	axios.get("/api/current_user");
+	const res = await axios.get("/api/current_user");
+	dispatch({ type: FETCH_USER, payload: res });
 };
