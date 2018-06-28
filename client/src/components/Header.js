@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 // IMPORT CONNECT HELPER FROM REACT-REDUX
 import { connect } from "react-redux";
+// IMPORT LINK TAG
+import { Link } from "react-router-dom";
 
 // CREATE CLASS-BASED COMPONENT
 class Header extends Component {
@@ -20,7 +22,7 @@ class Header extends Component {
 			default:
 				return (
 					<li>
-						<a>Logout</a>
+						<a href="/api/logout">Logout</a>
 					</li>
 				);
 		}
@@ -30,7 +32,12 @@ class Header extends Component {
 		return (
 			<nav>
 				<div className="nav-wrapper">
-					<a className="left brand-logo">Emaily</a>
+					<Link
+						to={this.props.auth ? "/surveys" : "/"}
+						className="left brand-logo"
+					>
+						Emaily
+					</Link>
 					<ul className="right">{this.renderContent()}</ul>
 				</div>
 			</nav>

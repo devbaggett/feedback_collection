@@ -31,8 +31,8 @@ module.exports = app => {
 		// function attached to request object by passport
 		// takes cookie containing user id and kills it
 		req.logout();
-		// acknowledgement to user saying not logged in
-		res.send(req.user);
+		// redirect user to root route of app
+		res.redirect("/");
 	});
 
 	// ROUTE HANDLER for get request to our app
