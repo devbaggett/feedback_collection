@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 // use schema object to create schema for new collection
 const userSchema = new Schema({
 	// every user will have googleID
-	googleID: String
+	googleID: String,
+	credits: { type: Number, default: 0 }
 });
 
 // CREATE MODEL CLASS

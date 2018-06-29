@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 // IMPORT LINK TAG
 import { Link } from "react-router-dom";
+// IMPORT PAYMENTS
+import Payments from "./Payments";
 
 // CREATE CLASS-BASED COMPONENT
 class Header extends Component {
@@ -20,11 +22,18 @@ class Header extends Component {
 				);
 			// USER MODEL (LOGGED IN)
 			default:
-				return (
-					<li>
+				return [
+					// SHOWS PAYMENT COMPONENT
+					<li key="1">
+						<Payments />
+					</li>,
+					<li key="2" style={{ margin: "0 10px" }}>
+						Credits: {this.props.auth.credits}
+					</li>,
+					<li key="3">
 						<a href="/api/logout">Logout</a>
 					</li>
-				);
+				];
 		}
 	}
 	render() {

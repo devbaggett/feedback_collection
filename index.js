@@ -8,6 +8,8 @@ const cookieSession = require("cookie-session");
 const passport = require("passport");
 // IMPORT KEYS.JS
 const keys = require("./config/keys");
+// IMPORT BODYPARSER
+const bodyParser = require("body-parser");
 
 // IMPORT USER.JS FILE WITHOUT ASSIGNMENT
 require("./models/User");
@@ -19,6 +21,9 @@ mongoose.connect(keys.mongoURI);
 
 // *** use express library to create express application (single app) ***
 const app = express();
+
+// WIRE UP BODYPARSER MIDDLEWARE
+app.use(bodyParser.json());
 
 // ENABLE COOKIES AND GET EXPRESS TO CARE ABOUT THEM
 app.use(
@@ -40,6 +45,7 @@ app.use(passport.session());
 
 // CALL AUTHROUTES FUNCTION WITH APP OBJECT
 require("./routes/authRoutes")(app);
+require("./routes/billingRoutes")(app);
 
 // *** wait for Heroku to tell us what our app's port will be ***
 // if there is a Heroku port available, set it for production
