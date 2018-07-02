@@ -47,6 +47,19 @@ app.use(passport.session());
 require("./routes/authRoutes")(app);
 require("./routes/billingRoutes")(app);
 
+// CONFIG SO EXPRESS BEHAVES CORRECTLY IN PROD ENV (only ran in prod)
+// NODE_ENV is automatically set by Heroku in production
+if (process.env.NODE_ENV === "production") {
+	// Express will serve up production assets (i.e. main.js/main.css)
+	app.use(express.static("client/build"));
+	// CATCH-ALL ROUTE
+	// Express will serve up index.html file if doesn't recognize route
+	const path = require("path");
+	app.get("*", (req, res) => {
+		res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+	});
+}
+
 // *** wait for Heroku to tell us what our app's port will be ***
 // if there is a Heroku port available, set it for production
 // otherwise, handle case where we are using dev environment
