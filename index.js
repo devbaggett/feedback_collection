@@ -13,6 +13,8 @@ const bodyParser = require("body-parser");
 
 // IMPORT USER.JS FILE WITHOUT ASSIGNMENT
 require("./models/User");
+// IMPORT SURVEYS.JS FILE WITHOUT ASSIGNMENT
+require("./models/Surveys");
 // IMPORT PASSPORT FILE WITHOUT ASSIGNMENT
 require("./services/passport");
 
@@ -46,6 +48,7 @@ app.use(passport.session());
 // CALL AUTHROUTES FUNCTION WITH APP OBJECT
 require("./routes/authRoutes")(app);
 require("./routes/billingRoutes")(app);
+require("./routes/surveyRoutes")(app);
 
 // CONFIG SO EXPRESS BEHAVES CORRECTLY IN PROD ENV (only ran in prod)
 // NODE_ENV is automatically set by Heroku in production
