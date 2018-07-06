@@ -8,6 +8,9 @@ import reduxThunk from "redux-thunk";
 import App from "./components/App";
 // IMPORT STATEMENT FOR ALL THE DIFFERENT REDUCERS
 import reducers from "./reducers";
+// TEMPORARY CODE FOR TESTING API
+import axios from "axios";
+window.axios = axios;
 
 // USE CREATESTORE HELPER TO CREATE NEW REDUX STORE INSTANCE
 const store = createStore(reducers, {}, applyMiddleware(reduxThunk));

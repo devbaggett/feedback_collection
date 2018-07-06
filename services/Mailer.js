@@ -69,7 +69,7 @@ class Mailer extends helper.Mail {
 				body: this.toJSON()
 			});
 			// send off request to SendGrid API
-			const response = this.sgAPI.API(request);
+			const response = await this.sgAPI.API(request);
 			return response;
 		} catch (err) {
 			console.log(err.response.body.errors);

@@ -13,8 +13,12 @@ const surveyTemplate = require("../services/emailTemplates/surveyTemplate");
 const Survey = mongoose.model("surveys");
 
 module.exports = app => {
+	app.get("/api/surveys/thanks", (req, res) => {
+		res.send("Thanks for voting!");
+	});
+
 	// any # of functions can be passed in and they will be executed inline
-	app.post("/api/surveys", requireLogin, requireCredits, (req, res) => {
+	app.post("/api/surveys", requireLogin, requireCredits, async (req, res) => {
 		const { title, subject, body, recipients } = req.body;
 
 		// CREATE NEW INSTANCE OF SURVEY
@@ -36,7 +40,18 @@ module.exports = app => {
 		// 1st arg: entire survey object created above
 		// 2nd arg: template of email HTML body. Func to be called with survey object/model
 		const mailer = new Mailer(survey, surveyTemplate(survey));
-		// call send on mailer so it attempts to send itself
-		mailer.send();
+		try {
+			// call send on mailer so it attempts to send itself
+			await mailer.send();
+			await survey.save();
+			// deduct credits for sending a survey campaign
+			req.user.credits -= 1;
+			const user = await req.user.save();
+			// send back updated user model
+			res.send(user);
+		} catch (err) {
+			// unprocessable entity error
+			res.status(422).send(err);
+		}
 	});
 };
