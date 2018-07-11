@@ -1,44 +1,38 @@
 // SurveyForm shows a form for a user to add input
 
+// CONTAINS MAP FUNCTION TO ITERATE OVER ARRAY
+import _ from "lodash";
 // CREATE CLASS-BASED COMPONENT
 import React, { Component } from "react";
 // IMPORT HELPER TO ALLOW REDUX-FORM CONTROL
 import { reduxForm, Field } from "redux-form";
+// IMPORT REACT-ROUTER TO USE LINK HELPER
+import { Link } from "react-router-dom";
 import SurveyField from "./SurveyField";
 
 // ALL CAPS SO KNOW NOT TO CHANGE
-const FIELDS = [];
+const FIELDS = [
+	{ label: "Survey Title", name: "title" },
+	{ label: "Subject Line", name: "subject" },
+	{ label: "Email Body", name: "body" },
+	{ label: "Recipient List", name: "emails" }
+];
 
 class SurveyForm extends Component {
 	renderFields() {
-		return (
-			<div>
+		// MAP ITERRATES OVER LIST OF FIELDS
+		return _.map(FIELDS, ({ label, name }) => {
+			// CREATE NEW REDUX FORM FIELD AND RETURN IT
+			return (
 				<Field
-					label="Survey Title"
-					type="text"
-					name="title"
+					key={name}
 					component={SurveyField}
-				/>
-				<Field
-					label="Subject Line"
 					type="text"
-					name="subject"
-					component={SurveyField}
+					label={label}
+					name={name}
 				/>
-				<Field
-					label="Email Body"
-					type="text"
-					name="body"
-					component={SurveyField}
-				/>
-				<Field
-					label="Recipient List"
-					type="text"
-					name="emails"
-					component={SurveyField}
-				/>
-			</div>
-		);
+			);
+		});
 	}
 	render() {
 		return (
@@ -49,7 +43,16 @@ class SurveyForm extends Component {
 					)}
 				>
 					{this.renderFields()}
-					<button type="submit">Submit</button>
+					<Link to="/surveys" className="red btn-flat white-text">
+						Cancel
+					</Link>
+					<button
+						type="submit"
+						className="teal btn-flat right white-text"
+					>
+						Next
+						<i className="material-icons right">done</i>
+					</button>
 				</form>
 			</div>
 		);
