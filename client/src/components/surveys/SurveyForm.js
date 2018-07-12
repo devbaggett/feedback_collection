@@ -9,6 +9,8 @@ import { reduxForm, Field } from "redux-form";
 // IMPORT REACT-ROUTER TO USE LINK HELPER
 import { Link } from "react-router-dom";
 import SurveyField from "./SurveyField";
+// import validEmails func
+import validateEmails from "../../utils/validateEmails";
 
 // ALL CAPS SO KNOW NOT TO CHANGE
 const FIELDS = [
@@ -77,6 +79,10 @@ class SurveyForm extends Component {
 
 function validate(values) {
 	const errors = {};
+	// take string of emails and pass in validateEmails func
+	// errors only cares about properties that have values assigned to it
+	// if no emails have been entered, provide empty string
+	errors.emails = validateEmails(values.emails || "");
 	// FOR EVERY FIELD IN FIELDS ARR, PASS IN OBJECT
 	_.each(FIELDS, ({ name, noValueError }) => {
 		// IF THIS PROP DOESN'T HAVE VALUE ASSIGNED TO IT
@@ -85,6 +91,7 @@ function validate(values) {
 			errors[name] = noValueError;
 		}
 	});
+
 	return errors;
 }
 
