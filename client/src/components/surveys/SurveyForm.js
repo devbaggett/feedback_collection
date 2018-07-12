@@ -12,10 +12,26 @@ import SurveyField from "./SurveyField";
 
 // ALL CAPS SO KNOW NOT TO CHANGE
 const FIELDS = [
-	{ label: "Survey Title", name: "title" },
-	{ label: "Subject Line", name: "subject" },
-	{ label: "Email Body", name: "body" },
-	{ label: "Recipient List", name: "emails" }
+	{
+		label: "Survey Title",
+		name: "title",
+		noValueError: "You must provide a survey title"
+	},
+	{
+		label: "Subject Line",
+		name: "subject",
+		noValueError: "You must provide a subject title"
+	},
+	{
+		label: "Email Body",
+		name: "body",
+		noValueError: "You must provide an email body"
+	},
+	{
+		label: "Recipient List",
+		name: "emails",
+		noValueError: "You must provide a recipient list"
+	}
 ];
 
 class SurveyForm extends Component {
@@ -61,11 +77,14 @@ class SurveyForm extends Component {
 
 function validate(values) {
 	const errors = {};
-	// validate if there is title
-	if (!values.title) {
-		errors.title = "You must provide a title";
-	}
-
+	// FOR EVERY FIELD IN FIELDS ARR, PASS IN OBJECT
+	_.each(FIELDS, ({ name, noValueError }) => {
+		// IF THIS PROP DOESN'T HAVE VALUE ASSIGNED TO IT
+		if (!values[name]) {
+			// ADD ERROR MESSAGE FOR THAT PROPERTY
+			errors[name] = noValueError;
+		}
+	});
 	return errors;
 }
 
