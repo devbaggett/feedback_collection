@@ -11,35 +11,12 @@ import { Link } from "react-router-dom";
 import SurveyField from "./SurveyField";
 // import validEmails func
 import validateEmails from "../../utils/validateEmails";
-
-// ALL CAPS SO KNOW NOT TO CHANGE
-const FIELDS = [
-	{
-		label: "Survey Title",
-		name: "title",
-		noValueError: "You must provide a survey title"
-	},
-	{
-		label: "Subject Line",
-		name: "subject",
-		noValueError: "You must provide a subject title"
-	},
-	{
-		label: "Email Body",
-		name: "body",
-		noValueError: "You must provide an email body"
-	},
-	{
-		label: "Recipient List",
-		name: "emails",
-		noValueError: "You must provide a recipient list"
-	}
-];
+import formFields from "./formFields";
 
 class SurveyForm extends Component {
 	renderFields() {
 		// MAP ITERRATES OVER LIST OF FIELDS
-		return _.map(FIELDS, ({ label, name }) => {
+		return _.map(formFields, ({ label, name }) => {
 			// CREATE NEW REDUX FORM FIELD AND RETURN IT
 			return (
 				<Field
@@ -84,7 +61,7 @@ function validate(values) {
 	// if no emails have been entered, provide empty string
 	errors.emails = validateEmails(values.emails || "");
 	// FOR EVERY FIELD IN FIELDS ARR, PASS IN OBJECT
-	_.each(FIELDS, ({ name, noValueError }) => {
+	_.each(formFields, ({ name, noValueError }) => {
 		// IF THIS PROP DOESN'T HAVE VALUE ASSIGNED TO IT
 		if (!values[name]) {
 			// ADD ERROR MESSAGE FOR THAT PROPERTY
