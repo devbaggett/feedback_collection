@@ -95,7 +95,10 @@ function validate(values) {
 	return errors;
 }
 
+// Redux form helper which initializes and configures survey form
 export default reduxForm({
 	validate,
-	form: "surveyForm"
+	form: "surveyForm",
+	// defaults to true, with false it won't dump form data
+	destroyOnUnmount: false
 })(SurveyForm);
