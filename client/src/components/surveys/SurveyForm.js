@@ -59,7 +59,7 @@ function validate(values) {
 	// take string of emails and pass in validateEmails func
 	// errors only cares about properties that have values assigned to it
 	// if no emails have been entered, provide empty string
-	errors.emails = validateEmails(values.emails || "");
+	errors.recipients = validateEmails(values.recipients || "");
 	// FOR EVERY FIELD IN FIELDS ARR, PASS IN OBJECT
 	_.each(formFields, ({ name, noValueError }) => {
 		// IF THIS PROP DOESN'T HAVE VALUE ASSIGNED TO IT
