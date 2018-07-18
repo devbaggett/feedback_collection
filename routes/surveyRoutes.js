@@ -17,6 +17,16 @@ const surveyTemplate = require("../services/emailTemplates/surveyTemplate");
 const Survey = mongoose.model("surveys");
 
 module.exports = app => {
+	// make sure user is logged in before they fetch their surveys
+	app.get("/api/surveys", requireLogin, async (req, res) => {
+		const surveys = await Survey.find({ _user: req.user.id }).select({
+			recipients: false
+		});
+
+		// after we fetch, we send response back
+		res.send(surveys);
+	});
+
 	app.get("/api/surveys/:surveyID/:choice", (req, res) => {
 		res.send("Thanks for voting!");
 	});

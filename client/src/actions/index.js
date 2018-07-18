@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // IMPORT FETCH_USER
-import { FETCH_USER } from "./types";
+import { FETCH_USER, FETCH_SURVEYS } from "./types";
 
 // DEFINE ACTION CREATOR
 export const fetchUser = () => async dispatch => {
@@ -26,4 +26,11 @@ export const submitSurvey = (values, history) => async dispatch => {
 	history.push("/surveys");
 	// after request is completed, dispatch action to update user model
 	dispatch({ type: FETCH_USER, payload: res.data });
+};
+
+// FETCH_SURVEYS ACTION CREATOR
+export const fetchSurveys = () => async dispatch => {
+	const res = await axios.get("/api/surveys");
+	// payload will be an array of all the different surveys user has made
+	dispatch({ type: FETCH_SURVEYS, payload: res.data });
 };
