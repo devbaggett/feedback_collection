@@ -18,6 +18,7 @@ require("./models/Surveys");
 // IMPORT PASSPORT FILE WITHOUT ASSIGNMENT
 require("./services/passport");
 
+mongoose.Promise = global.Promise;
 // INSTRUCT MONGOOSE TO ATTEMPT TO CONNECT TO MONGODB
 mongoose.connect(keys.mongoURI);
 

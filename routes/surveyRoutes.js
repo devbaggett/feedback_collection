@@ -1,6 +1,10 @@
 // REQUIRE IN MONGOOSE
 const mongoose = require("mongoose");
 // REQUIRE IN REQUIRELOGIN FUNCTION FROM MIDDLEWARES DIR
+const _ = require("lodash");
+const Path = require("path-parser").default;
+// import URL module from nodeJS to help parse URLs
+const { URL } = require("url");
 const requireLogin = require("../middlewares/requireLogin");
 // REQUIRE IN REQUIRECREDITS FUNCTION FROM MIDDLEWARES
 const requireCredits = require("../middlewares/requireCredits");
@@ -13,12 +17,52 @@ const surveyTemplate = require("../services/emailTemplates/surveyTemplate");
 const Survey = mongoose.model("surveys");
 
 module.exports = app => {
-	app.get("/api/surveys/thanks", (req, res) => {
+	app.get("/api/surveys/:surveyID/:choice", (req, res) => {
 		res.send("Thanks for voting!");
 	});
 
 	app.post("/api/surveys/webhooks", (req, res) => {
-		console.log(req.body);
+		// pull off survey ID and choice
+		const p = new Path("/api/surveys/:surveyID/:choice");
+		// use lodash to iterate over req.body
+		// 2nd: for every iteration, run that function
+		_.chain(req.body)
+			.map(({ email, url }) => {
+				// extract the URL path: /api/surveys/<ID>/<choice>
+				const match = p.test(new URL(url).pathname);
+				// if not null
+				if (match) {
+					// return email also
+					return {
+						email,
+						surveyID: match.surveyID,
+						choice: match.choice
+					};
+				}
+			})
+			.compact()
+			.uniqBy("email", "surveyID")
+			// iterate over list of events and issue query for everyone
+			.each(({ surveyID, email, choice }) => {
+				// find and update one survey
+				Survey.updateOne(
+					{
+						_id: surveyID,
+						recipients: {
+							$elemMatch: { email: email, responded: false }
+						}
+					},
+					{
+						// find choice property, and increment by 1
+						$inc: { [choice]: 1 },
+						// update responded property to true
+						$set: { "recipients.$.responded": true },
+						lastResponded: new Date()
+					}
+				).exec(); // execute query
+			})
+			.value();
+
 		res.send({});
 	});
 
